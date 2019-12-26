@@ -1,4 +1,4 @@
 .classpath
 .project
 .idea/
-.target/
+target/
