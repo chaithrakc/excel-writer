@@ -15,30 +15,30 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ComposeExcel<T> {
-    private final static Logger LOGGER = Logger.getLogger(ComposeExcel.class);
+public class ExcelWriter<T> {
+    private static final Logger LOGGER = Logger.getLogger(ExcelWriter.class);
     private SXSSFWorkbook workbook;
     private SXSSFSheet sheet;
     private File excelFile;
     private Class<T> excelVo;
     private Map<String,Integer> headerRowMapper = new HashMap<>();
     private AtomicInteger rowNum = new AtomicInteger();
-    private ComposeExcel(File excelFile, Class<T> excelVoClass) throws IOException {
+    private ExcelWriter(File excelFile, Class<T> excelVoClass) throws IOException {
         isWriteableFile(excelFile);
         this.excelVo = excelVoClass;
         workbook = new SXSSFWorkbook(SXSSFWorkbook.DEFAULT_WINDOW_SIZE);
         sheet = workbook.createSheet(this.excelVo.getSimpleName());
     }
-    public ComposeExcel(String excelFilePath, Class<T> excelVoClass) throws IOException{
+    public ExcelWriter(String excelFilePath, Class<T> excelVoClass) throws IOException{
         this(new File(excelFilePath), excelVoClass);
     }
-    public void renderData(List<T> tList) throws ExcelWriterException {
+    public void renderData(List<T> excelVoList) throws ExcelWriterException {
         getExcelVoFields();
         createHeaderRow();
-        generateExcelRows(tList);
+        generateExcelRows(excelVoList);
     }
-    private void generateExcelRows(List<T> tList) throws ExcelWriterException {
-        for (T vo : tList) {
+    private void generateExcelRows(List<T> excelVoList) throws ExcelWriterException {
+        for (T vo : excelVoList) {
             Row row = sheet.createRow(rowNum.incrementAndGet());
             try {
                 populateExcelRows(row, vo);
@@ -83,7 +83,7 @@ public class ComposeExcel<T> {
             workbook.close();
         }
     }
-    private void populateExcelRows(Row row, T t) throws ExcelWriterException {
+    private void populateExcelRows(Row row, T excelVo) throws ExcelWriterException {
         AtomicReference<Object> cellValue = new AtomicReference<>();
         String fieldName;
         Integer columnNum;
@@ -91,8 +91,8 @@ public class ComposeExcel<T> {
             fieldName = entry.getKey();
             columnNum = entry.getValue();
             try {
-                Method method = t.getClass().getMethod("get".concat(fieldName));
-                cellValue.set(method.invoke(t));
+                Method method = excelVo.getClass().getMethod("get".concat(fieldName));
+                cellValue.set(method.invoke(excelVo));
                 createCell(row, columnNum, cellValue.get());
             } catch (Exception ex) {
                 throw new ExcelWriterException("unable to write data for columnNum" + columnNum + " fieldName " + fieldName);
