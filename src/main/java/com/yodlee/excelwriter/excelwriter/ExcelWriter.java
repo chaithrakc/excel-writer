@@ -70,17 +70,10 @@ public class ExcelWriter<T> {
         headerCell.setCellStyle(style);
     }
     public void generateExcelFile() throws ExcelWriterException, IOException {
-        FileOutputStream fileOutputStream = null;
-        try {
-            fileOutputStream = new FileOutputStream(excelFile);
+        try(FileOutputStream fileOutputStream = new FileOutputStream(excelFile)) {
             workbook.write(fileOutputStream);
-            fileOutputStream.close();
         } catch (IOException ex) {
             throw new ExcelWriterException("unable to generate excel file " + ex.getMessage());
-        } finally {
-            if (fileOutputStream != null)
-                fileOutputStream.close();
-            workbook.close();
         }
     }
     private void populateExcelRows(Row row, T excelVo) throws ExcelWriterException {
