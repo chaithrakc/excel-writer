@@ -2,6 +2,9 @@ package com.chaithra.excelwriter.utils;
 
 public final class ExcelHelper {
 
+    private ExcelHelper(){
+    }
+
    public static final String STRING_EMPTY = "";
 
     public static String capitalizeInitialLetter(String str) {
