@@ -1,7 +1,7 @@
-package com.yodlee.excelwriter.excelwriter;
+package com.chaithra.excelwriter.excelwriter;
 
-import com.yodlee.excelwriter.exceptions.ExcelWriterException;
-import com.yodlee.excelwriter.utils.ExcelHelper;
+import com.chaithra.excelwriter.exceptions.ExcelWriterException;
+import com.chaithra.excelwriter.utils.ExcelHelper;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFSheet;

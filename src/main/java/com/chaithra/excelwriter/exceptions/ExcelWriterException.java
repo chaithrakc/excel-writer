@@ -1,4 +1,4 @@
-package com.yodlee.excelwriter.exceptions;
+package com.chaithra.excelwriter.exceptions;
 
 public class ExcelWriterException extends Exception {
     public ExcelWriterException(){

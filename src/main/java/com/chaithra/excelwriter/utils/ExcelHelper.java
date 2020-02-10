@@ -1,4 +1,4 @@
-package com.yodlee.excelwriter.utils;
+package com.chaithra.excelwriter.utils;
 
 public final class ExcelHelper {
 
