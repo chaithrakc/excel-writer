@@ -1,35 +1,40 @@
-package com.chaithra.excelwriter.excelwriter;
+package com.reports.excelwriter;
 
-import com.chaithra.excelwriter.exceptions.ExcelWriterException;
-import com.chaithra.excelwriter.utils.ExcelHelper;
-import org.apache.log4j.Logger;
+import com.reports.exceptions.ExcelWriterException;
+import com.reports.utils.ExcelHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ExcelWriter<T> {
-    private static final Logger LOGGER = Logger.getLogger(ExcelWriter.class);
-    private SXSSFWorkbook workbook;
-    private SXSSFSheet sheet;
+    private static final Logger LOGGER = LogManager.getLogger(ExcelWriter.class);
+    private final SXSSFWorkbook workbook;
+    private final SXSSFSheet sheet;
     private File excelFile;
-    private Class<T> excelVo;
-    private Map<String,Integer> headerRowMapper = new HashMap<>();
-    private AtomicInteger rowNum = new AtomicInteger();
-    private ExcelWriter(File excelFile, Class<T> excelVoClass) throws IOException {
+    private final Class<T> excelVo;
+    private final Map<String,Integer> headerRowMapper = new HashMap<>();
+    private final AtomicInteger rowNum = new AtomicInteger();
+    private ExcelWriter(File excelFile, Class<T> excelVoClass) {
         isWriteableFile(excelFile);
         this.excelVo = excelVoClass;
         workbook = new SXSSFWorkbook(SXSSFWorkbook.DEFAULT_WINDOW_SIZE);
         sheet = workbook.createSheet(this.excelVo.getSimpleName());
     }
-    public ExcelWriter(String excelFilePath, Class<T> excelVoClass) throws IOException{
+    public ExcelWriter(String excelFilePath, Class<T> excelVoClass) {
         this(new File(excelFilePath), excelVoClass);
     }
     public void renderData(List<T> excelVoList) throws ExcelWriterException {
@@ -69,7 +74,7 @@ public class ExcelWriter<T> {
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
         headerCell.setCellStyle(style);
     }
-    public void generateExcelFile() throws ExcelWriterException, IOException {
+    public void generateExcelFile() throws ExcelWriterException {
         try(FileOutputStream fileOutputStream = new FileOutputStream(excelFile)) {
             workbook.write(fileOutputStream);
         } catch (IOException ex) {
@@ -92,9 +97,7 @@ public class ExcelWriter<T> {
             }
         }
     }
-    private void isWriteableFile(File excelFile) throws IOException {
-        if (!excelFile.canWrite())
-            throw new IOException("Unable to write " + excelFile.getAbsolutePath());
+    private void isWriteableFile(File excelFile) {
         this.excelFile = excelFile;
     }
     private Cell createCell(Row row, Integer columnNumber, Object cellValue) {
