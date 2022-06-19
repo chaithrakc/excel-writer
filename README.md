@@ -28,9 +28,12 @@ excelWriter.generateExcelFile();
 | xxxx-yy-prd | zzzz | Main   | 0             | Not an Error     | OK            |
 | xxxx-yy-prd | zzzz | Main   | Not Available | Not Available    | Not Available |
 ```
+## Technology Stack
+- Java Features Used: Generics, Reflection APIs, and Streams
+- Apache POI
 
 ## Enhancements
-1. Pagination in case of application wants to write data in parts
-2. Writing the data present in nested classes and data structures (such as Map, List, and Set) into the report file
-3. Generating multiple excel files if data exceeds the maximum limit of excel file size
+- Pagination in case of application wants to write data in parts
+- Writing the data present in nested classes and data structures (such as Map, List, and Set) into the report file
+- Generating multiple excel files if data exceeds the maximum limit of excel file size
 
